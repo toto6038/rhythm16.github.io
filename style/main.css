@@ -133,6 +133,24 @@ progress {
 summary {
   display: list-item;
 }
+h1 {
+  font-weight: 300;
+}
+h2 {
+  font-weight: normal;
+}
+h3 {
+  font-weight: normal;
+}
+h4 {
+  font-weight: normal;
+}
+h5 {
+  font-weight: normal;
+}
+h6 {
+  font-weight: normal;
+}
 .hljs {
   display: block;
   overflow-x: auto;
@@ -278,7 +296,7 @@ hr {
   margin: 10px 0;
 }
 .site-header-container {
-  position: fixed;
+  position: relative;
   right: 0;
   left: 0;
   z-index: 1024;
@@ -345,7 +363,7 @@ hr {
   padding: 2px 8px;
   font-size: 22px;
   margin: 16px 0;
-  font-weight: bold;
+  font-weight: normal;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -384,7 +402,7 @@ a.purple-link {
 .content-container {
   width: 100%;
   flex: 1;
-  padding: 46px 16px 32px;
+  padding: 16px 16px 32px;
 }
 .post-item {
   display: flex;
