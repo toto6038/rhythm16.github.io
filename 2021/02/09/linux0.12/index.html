@@ -7,13 +7,12 @@
 
 <meta charset="utf-8" >
 
-<title>Linux0.12</title>
-<meta name="keywords" content="Linux0.12, blog keywords">
+<title>⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得</title>
+<meta name="keywords" content="⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得, blog keywords">
 <meta name="description" content="
-tags: github⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得
 這是一本線上可取得的免費書籍，作者為趙炯博士，現為同济大学机械工程学院机械电子教研室副教授，可於作者網站 www.oldlinux.org 下載這本書
 
-故">
+故事這本書是2019二月同學介紹給我的，我甚至記得我們是晚上在學校福利社外面遇到。在">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -92,7 +91,7 @@ tags: github⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得
   <div class="content-container">
     <div class="post-detail">
       
-      <h2 class="post-title">Linux0.12</h2>
+      <h2 class="post-title">⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得</h2>
       <div class="post-info post-detail-info">
         <span><i class="icon icon-calendar-outline"></i> 2021-02-09</span>
         
@@ -109,8 +108,7 @@ tags: github⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得
       </div>
       <div class="post-content-wrapper">
         <div class="post-content">
-          <hr>
-<h2 id="tags-github"><a href="#tags-github" class="headerlink" title="tags: github"></a>tags: github</h2><h1 id="⟪Linux-0-12-內核完全註釋v5-0⟫-閱讀心得"><a href="#⟪Linux-0-12-內核完全註釋v5-0⟫-閱讀心得" class="headerlink" title="⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得"></a>⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得</h1><blockquote>
+          <blockquote>
 <p>這是一本線上可取得的免費書籍，作者為趙炯博士，現為同济大学机械工程学院机械电子教研室副教授，可於作者網站 <a target="_blank" rel="noopener" href="http://www.oldlinux.org/">www.oldlinux.org</a> 下載這本書</p>
 </blockquote>
 <h2 id="故事"><a href="#故事" class="headerlink" title="故事"></a>故事</h2><p>這本書是2019二月同學介紹給我的，我甚至記得我們是晚上在學校福利社外面遇到。在回家後讀了序言和第一章我就知道一定要讀這本書。至於為什麼，是因為我一直對作業系統很有興趣，具體來說是想要知道一個OS到底是怎麼寫出來的，而好笑的是在學校修了作業系統之後這個問題完全沒有獲得解答。</p>
@@ -174,16 +172,16 @@ tags: github⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得
 
         </div>
         <div class="top-div">
-          <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#tags-github"><span class="top-box-text">tags: github</span></a></li></ol></li><li class="top-box-item top-box-level-1"><a class="top-box-link" href="#%E2%9F%AALinux-0-12-%E5%85%A7%E6%A0%B8%E5%AE%8C%E5%85%A8%E8%A8%BB%E9%87%8Bv5-0%E2%9F%AB-%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97"><span class="top-box-text">⟪Linux 0.12 內核完全註釋v5.0⟫ 閱讀心得</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%95%85%E4%BA%8B"><span class="top-box-text">故事</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E4%BB%8B%E7%B4%B9-%E8%88%87%E6%9B%B8%E4%B8%AD%E7%9A%84%E5%85%A7%E5%AE%B9%E8%AA%AA%E6%98%8E%E7%9B%B8%E5%90%8C"><span class="top-box-text">介紹 (與書中的內容說明相同)</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%85%88%E5%82%99%E7%9F%A5%E8%AD%98"><span class="top-box-text">先備知識</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%9B%B8%E5%B0%8D%E7%9A%84weak-parts"><span class="top-box-text">相對的weak parts</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E5%85%B6%E4%BB%96%E6%9B%B8%E7%B1%8D"><span class="top-box-text">其他書籍</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E9%96%B1%E8%AE%80%E5%BB%BA%E8%AD%B0"><span class="top-box-text">閱讀建議</span></a></li></ol>
+          <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%95%85%E4%BA%8B"><span class="top-box-text">故事</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E4%BB%8B%E7%B4%B9-%E8%88%87%E6%9B%B8%E4%B8%AD%E7%9A%84%E5%85%A7%E5%AE%B9%E8%AA%AA%E6%98%8E%E7%9B%B8%E5%90%8C"><span class="top-box-text">介紹 (與書中的內容說明相同)</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%85%88%E5%82%99%E7%9F%A5%E8%AD%98"><span class="top-box-text">先備知識</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%9B%B8%E5%B0%8D%E7%9A%84weak-parts"><span class="top-box-text">相對的weak parts</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E5%85%B6%E4%BB%96%E6%9B%B8%E7%B1%8D"><span class="top-box-text">其他書籍</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E9%96%B1%E8%AE%80%E5%BB%BA%E8%AD%B0"><span class="top-box-text">閱讀建議</span></a></li></ol>
         </div>
       </div>
     </div>
 
     
       <div class="next-post">
-        <a class="purple-link" href="/2020/01/01/hello-world/">
+        <a class="purple-link" href="/2020/09/12/static_inline/">
           <h3 class="post-title">
-            Next: Hello World
+            Next: 幹嘛static inline?
           </h3>
         </a>
       </div>
