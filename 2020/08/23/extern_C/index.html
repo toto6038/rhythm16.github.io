@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+
+<script>!function(){var e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,t=localStorage.getItem("use-color-scheme")||"auto";("dark"===t||e&&"light"!==t)&&document.documentElement.classList.toggle("dark",!0)}()</script>
+
+<meta charset="utf-8" >
+
+<title>extern &#34;C&#34; 如何使系統函式庫兼容C與C++</title>
+<meta name="keywords" content="extern &#34;C&#34; 如何使系統函式庫兼容C與C++, blog keywords">
+<meta name="description" content="原始的問題故事是這樣的：如果我們有個C函式庫，裡面有函數例如：
+/* cfunc.c */
+ 
+void awesome_C_function()
+&#123;
+    /* does nothing */
+&#125;
+你可能會想說：C函">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+    <link rel="stylesheet" href="/style/prism.css"/>
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div id="app" class="main">
+
+<div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="http://rhythm16.github.io">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="http://rhythm16.github.io">
+        <h1 class="site-title">Transparent Abstraction</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        Home
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        Tags
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        Categories
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        Archives
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        About
+      </a>
+    
+  
+</nav>
+</div>
+
+
+
+  <div class="content-container">
+    <div class="post-detail">
+      
+      <h2 class="post-title">extern &#34;C&#34; 如何使系統函式庫兼容C與C++</h2>
+      <div class="post-info post-detail-info">
+        <span><i class="icon icon-calendar-outline"></i> 2020-08-23</span>
+        
+          <span>
+          <i class="icon icon-pricetags-outline"></i>
+            
+              <a href="/tags/C/">
+              C
+                
+              </a>
+            
+          </span>
+        
+      </div>
+      <div class="post-content-wrapper">
+        <div class="post-content">
+          <h2 id="原始的問題"><a href="#原始的問題" class="headerlink" title="原始的問題"></a>原始的問題</h2><p>故事是這樣的：<br>如果我們有個C函式庫，裡面有函數例如：</p>
+<pre class="line-numbers language-clike" data-language="clike"><code class="language-clike"><span class="token comment">/* cfunc.c */</span>
+ 
+void <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">/* does nothing */</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>你可能會想說：C函式庫，C++程式應該也可以用吧</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">/* main.cpp */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+
+<span class="token keyword">void</span> <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>那編譯看看：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ gcc <span class="token parameter variable">-c</span> cfunc.c
+$ g++ <span class="token parameter variable">-c</span> main.cpp
+$ g++ main.o cfunc.o <span class="token parameter variable">-o</span> a.out
+main.o: In <span class="token keyword">function</span> <span class="token variable"><span class="token variable">`</span>main<span class="token variable">`</span></span><span class="token builtin class-name">:</span>
+main.cpp:<span class="token punctuation">(</span>.text+0x5<span class="token punctuation">)</span>: undefined reference to <span class="token variable"><span class="token variable">`</span>awesome_C_function<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token variable">`</span></span>
+collect2: error: ld returned <span class="token number">1</span> <span class="token builtin class-name">exit</span> status<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>問號？？為什麼會這樣勒<br>原因是g++在編譯C++程式時，會對符號(變數與函數名稱等等)進行符號修飾(<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Name_mangling">name mangling</a>)，導致鏈接器在鏈接時找不到對應的符號名稱，對應到最後一行<code>collect2: error: ld returned 1 exit status</code></p>
+<p>如果使用<code>readelf</code>工具檢視各個編譯出的.o檔的符號表，就可以看出端倪：(注意不同版本之編譯器、作業系統結果可能不完全一樣)<br>main.o:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ readelf <span class="token parameter variable">-s</span> main.o <span class="token comment">#-s表示顯示符號表</span>
+
+Symbol table `.symtab' contains <span class="token number">21</span> entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+<span class="token punctuation">..</span>.
+    <span class="token number">16</span>: 0000000000000000     <span class="token number">0</span> NOTYPE  GLOBAL DEFAULT  UND _Z18awesome_C_functionv
+<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>cfunc.o:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ readelf <span class="token parameter variable">-s</span> cfunc.o
+
+Symbol table `.symtab' contains <span class="token number">21</span> entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+<span class="token punctuation">..</span>.
+     <span class="token number">8</span>: 0000000000000000     <span class="token number">0</span> FUNC    GLOBAL DEFAULT    <span class="token number">1</span> awesome_C_function
+<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>雖然我們source code都是寫<code>awesome_C_function()</code>，因為C++有符號修飾，變成了兩個不同名字的符號，產生錯誤。</p>
+<h2 id="extern-“C”-如何解決問題"><a href="#extern-“C”-如何解決問題" class="headerlink" title="extern “C” 如何解決問題"></a>extern “C” 如何解決問題</h2><p>好在，C++有<code>extern &quot;C&quot;</code>語法，可以定義C符號，使其不做符號修飾，若修改main.cpp成</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">/* main.cpp */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+
+<span class="token keyword">extern</span> <span class="token string">"C"</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">void</span> <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>則程式可正常編譯，執行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ g++ <span class="token parameter variable">-c</span> main.cpp
+$ g++ main.o cfunc.o <span class="token parameter variable">-o</span> a.out
+$ ./a.out
+$<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>太好了，問題乍看之下解決了，不過如果我們想把函式庫標頭另外放在一個檔案，供人<code>#include</code>，會出現C不支援<code>extern &quot;C&quot;</code>的問題，也就是說如果我們這樣寫awesome.h:</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">/* awesome.h */</span>
+<span class="token keyword">extern</span> <span class="token string">"C"</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">void</span> <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>main.cpp:</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">/* main.cpp */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"awesome.h"</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面的main.cpp使用g++編譯完全沒有錯誤，但如果今天想寫C，並使用<code>awesome.h</code>函式庫的話：</p>
+<pre class="line-numbers language-clike" data-language="clike"><code class="language-clike"><span class="token comment">/* main.c */</span>
+
+#include <span class="token string">"awesome.h"</span>
+
+int <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用gcc編譯會直接報錯，錯誤內容就不貼出了，反正gcc在抱怨他根本看不懂include進來的extern “C”語法啊，那是C++專屬的。</p>
+<p>難道一個編譯好的C函式庫，要配套兩種標頭檔嗎，一個給C用，一個給C++用？<br>答案是不需要，使用編譯前的預處理器可以幫我們解決問題！<br>在編譯C++程式時，C++的編譯器會定義”__cplusplus”這個macro，所以只要把awesome.h寫成這樣就解決問題了。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">/* awesome.h */</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__cplusplus</span></span>
+<span class="token keyword">extern</span> <span class="token string">"C"</span> <span class="token punctuation">&#123;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+
+<span class="token keyword">void</span> <span class="token function">awesome_C_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__cplusplus</span></span>
+<span class="token punctuation">&#125;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如此一來，無論是C還是C++程式，都可以<code>#include &quot;awesome.h&quot;</code>了，預處理器會自動的依情況展開，編譯、鏈接都會成功。</p>
+<p>這樣的技巧再幾乎所有的系統標頭檔都有用到。<br>本文內容來自<br><strong>俞甲子、石凡、潘愛民 (2009). ⟪程序員的自我修養⟫</strong><br>是我自己閱讀消化之後所做之筆記。</p>
+
+        </div>
+        <div class="top-div">
+          <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%8E%9F%E5%A7%8B%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="top-box-text">原始的問題</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#extern-%E2%80%9CC%E2%80%9D-%E5%A6%82%E4%BD%95%E8%A7%A3%E6%B1%BA%E5%95%8F%E9%A1%8C"><span class="top-box-text">extern “C” 如何解決問題</span></a></li></ol>
+        </div>
+      </div>
+    </div>
+
+    
+      <div class="next-post">
+        <a class="purple-link" href="/2020/01/01/hello-world/">
+          <h3 class="post-title">
+            Next: Hello World
+          </h3>
+        </a>
+      </div>
+    
+  </div>
+
+
+
+
+<footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+      </div>
+      
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+
+    <script>window.is_post = true;</script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+    </div>
+  </body>
+</html>
+

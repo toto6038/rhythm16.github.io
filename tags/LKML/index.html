@@ -89,7 +89,7 @@
 
   <div class="current-tag-container">
     <h2 class="title">
-      <i class="icon icon-pricetags-outline"></i> C
+      <i class="icon icon-pricetags-outline"></i> LKML
     </h2>
   </div>
 
@@ -97,65 +97,31 @@
 
 <section class="post-item">
     <div class="content">
-      <a href="/2020/09/12/static_inline/">
-        <h2 class="post-title">幹嘛static inline?</h2>
+      <a href="/2020/10/28/first_patch/">
+        <h2 class="post-title">第一次給Linux Kernel發patch</h2>
       </a>
-      <a href="/2020/09/12/static_inline/">
+      <a href="/2020/10/28/first_patch/">
           <div class="post-abstract">
             
-			    
-2020&#x2F;11&#x2F;25更新：這篇對一半吧，這篇比較完整，也比較正確
-
-忘記在哪時候看到這篇(我有所不知的 static inline function)，讀完覺得頗有趣的，來記錄一下。這篇是靠感覺打的，沒有實作跟去che
+			    一路的故事是滿意外的，有天跟同學吃飯聊到了我讀的32bit x86架構的memory reference，又再一次提醒了我我對於64bit一無所知的事實。回家手癢google了”x86_64 memory reference”，前幾個搜尋結
             
           </div>
       </a>
       <div class="post-info">
-        <span><i class="icon icon-calendar-outline"></i> 2020-09-12</span>
+        <span><i class="icon icon-calendar-outline"></i> 2020-10-28</span>
         
           <span>
             <i class="icon icon-pricetags-outline"></i>
             
-              <a href="/tags/C/">
-                C
+              <a href="/tags/Linux/">
+                Linux
+                
+                  ，
                 
               </a>
             
-          </span>
-        
-      </div>
-    </div>
-  </section>
-
-
-
-<section class="post-item">
-    <div class="content">
-      <a href="/2020/08/23/extern_C/">
-        <h2 class="post-title">extern &#34;C&#34; 如何使系統函式庫兼容C與C++</h2>
-      </a>
-      <a href="/2020/08/23/extern_C/">
-          <div class="post-abstract">
-            
-			    原始的問題故事是這樣的：如果我們有個C函式庫，裡面有函數例如：
-/* cfunc.c */
- 
-void awesome_C_function()
-&#123;
-    /* does nothing */
-&#125;
-你可能會想說：C函
-            
-          </div>
-      </a>
-      <div class="post-info">
-        <span><i class="icon icon-calendar-outline"></i> 2020-08-23</span>
-        
-          <span>
-            <i class="icon icon-pricetags-outline"></i>
-            
-              <a href="/tags/C/">
-                C
+              <a href="/tags/LKML/">
+                LKML
                 
               </a>
             
