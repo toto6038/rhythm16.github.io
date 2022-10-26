@@ -562,7 +562,7 @@ nav {
 }
 .post-content a {
   word-break: break-all;
-  color: #0e78db;
+  color: #6189d1;
   font-weight: 600;
   transition: all 0.2s;
 }
@@ -605,7 +605,7 @@ nav {
 .post-content blockquote {
   background: #f3f5f7;
   padding: 16px;
-  border-left: 2px solid var(--c-base-purple);
+  border-left: 2px solid rgba(225,224,170,0.839);
   margin-bottom: 16px;
 }
 .post-content blockquote p {
@@ -928,7 +928,7 @@ html.dark .post-content ol {
   color: #c0c0c0;
 }
 html.dark .post-content blockquote {
-  background: #111827;
+  background: rgba(52,52,52,0.561);
 }
 html.dark .highlight,
 html.dark pre[class*=language-].line-numbers {
